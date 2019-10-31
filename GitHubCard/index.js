@@ -3,6 +3,9 @@
            https://api.github.com/users/<your name>
 */
 
+
+
+//   })
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
    data in order to use it to build your component function 
@@ -24,7 +27,15 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = [
+  'taterntots',
+  'spencer-mcguire',
+  'jevoncochran',
+  'AnthonyLopez1120',
+  'jsulinski'
+];
+
+
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -46,6 +57,56 @@ const followersArray = [];
 
 */
 
+function gitCard(obj){
+  const newCard = document.createElement('div');
+  
+  const newImage = document.createElement('img');
+  const newInfo = document.createElement('div');
+
+    const newName = document.createElement('h3');
+    const newUserName = document.createElement('p');
+    const newLocation = document.createElement('p');
+    const newProfile = document.createElement('p');
+      const newLink = document.createElement('a');
+    const newFollowers = document.createElement('p');
+    const newFollowing = document.createElement('p');
+    const newBio = document.createElement('p');
+    const newNewLink = document.createElement('a');
+
+newImage.src = obj.data.avatar_url;
+newName.textContent = obj.data.name;
+newUserName.textContent = obj.data.login;
+newLocation.textContent = 'Location: ' + obj.data.location;
+newProfile.textContent = 'Profile: '
+newLink.textContent = obj.data.html_url;
+newLink.href = obj.data.html_url;
+newFollowers.textContent = 'Followers: ' + obj.data.followers;
+newFollowing.textContent = 'Following: ' + obj.data.following;
+newBio.textContent = 'Bio: ' + obj.data.bio;
+
+newCard.classList.add('card');
+newInfo.classList.add('card-info');
+newName.classList.add('name');
+newUserName.classList.add('username');
+
+newCard.appendChild(newImage);
+newCard.appendChild(newInfo);
+
+newInfo.appendChild(newName);
+newInfo.appendChild(newUserName);
+newInfo.appendChild(newLocation);
+newInfo.appendChild(newProfile);
+  newProfile.appendChild(newLink);
+newInfo.appendChild(newFollowers);
+newInfo.appendChild(newFollowing);
+newInfo.appendChild(newBio);
+
+return newCard;
+
+}
+
+const entryPoint = document.querySelector(".cards");
+
 /* List of LS Instructors Github username's: 
   tetondan
   dustinmyers
@@ -53,3 +114,37 @@ const followersArray = [];
   luishrd
   bigknell
 */
+
+axios.get("https://api.github.com/users/wsu718")
+  .then(response => {
+    // console.log(response)
+    // console.log(response.data.name);
+    const newGit = gitCard(response);
+      entryPoint.appendChild(newGit);
+    })
+    .catch(error => {
+      console.log("The data was not returned", error)
+    });
+
+followersArray.forEach(follower => {
+  axios.get(`https://api.github.com/users/${follower}`)
+  .then(response => {
+    // console.log(response)
+    // console.log(response.data.name);
+    const newGit = gitCard(response);
+      entryPoint.appendChild(newGit);
+    })
+    .catch(error => {
+      console.log("The data was not returned", error)
+    });
+})
+    
+// axios.get("https://api.github.com/users/wsu718/followers")
+//   .then(response => {
+//     console.log(response)
+//     // console.log(response.data.name);
+//     response.data.forEach(item => {
+//     const newGit = gitCard(item);
+//     entryPoint.appendChild(newGit);
+//     })
+//     });
