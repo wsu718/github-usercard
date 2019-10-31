@@ -117,7 +117,7 @@ const entryPoint = document.querySelector(".cards");
 
 axios.get("https://api.github.com/users/wsu718")
   .then(response => {
-    // console.log(response)
+    console.log(response)
     // console.log(response.data.name);
     const newGit = gitCard(response);
       entryPoint.appendChild(newGit);
@@ -126,6 +126,7 @@ axios.get("https://api.github.com/users/wsu718")
       console.log("The data was not returned", error)
     });
 
+//create cards for follwersArray
 followersArray.forEach(follower => {
   axios.get(`https://api.github.com/users/${follower}`)
   .then(response => {
@@ -138,13 +139,24 @@ followersArray.forEach(follower => {
       console.log("The data was not returned", error)
     });
 })
-    
-// axios.get("https://api.github.com/users/wsu718/followers")
-//   .then(response => {
-//     console.log(response)
-//     // console.log(response.data.name);
-//     response.data.forEach(item => {
-//     const newGit = gitCard(item);
-//     entryPoint.appendChild(newGit);
-//     })
-//     });
+ 
+//stretch goal: create cards programatically  
+axios.get("https://api.github.com/users/wsu718/followers")
+  .then(response => {
+    response.data.forEach(item => {
+      // console.log(item);
+      axios.get(`https://api.github.com/users/${item.login}`)
+      .then(response => {
+        const newGit = gitCard(response);
+        entryPoint.appendChild(newGit);  
+    })
+  })
+});
+    // console.log(response);
+    // // 
+    // // .then(resp => {
+    // //   resp.data.forEach(item => {
+    // //     
+    // // })
+    // // })
+    // });
